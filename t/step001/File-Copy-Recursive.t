@@ -31,7 +31,7 @@ sub establish_tree {
 
     Path::Tiny::path ($dir . "/data.lines")->spew ('text1 text2');
     Path::Tiny::path ($dir . "/data.lines")->chmod (0666);
-        
+
     Path::Tiny::path ($dir . "/subdir1/data.txt")->spew ('text1 text2 text3 text4 text5');
     Path::Tiny::path ($dir . "/subdir1/data.txt")->chmod(0644);
     Path::Tiny::path ($dir . "/subdir1/data.lines")->spew ('text1 text2 text3 text4 text5 text6');
