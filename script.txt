@@ -1,0 +1,15 @@
+Step 001
+
+* Test using Test::Spec
+* Testing File::Copy::Recursive
+
+  Not a challenging set of tests, but a simple set of tests.  This allows me
+  to explore for you all the aspects of Test::Spec.
+
+------------------------------------------------------------------
+Step 002
+
+* Consolidate the commong code (t/Utils/FileSystemSupport.pm).
+* Consolidate all the tests to be used in all the examples.
+
+
