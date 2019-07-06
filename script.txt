@@ -12,7 +12,18 @@ Step 002
 * Consolidate the commong code (t/Utils/FileSystemSupport.pm).
 * Consolidate all the tests to be used in all the examples.
 
+Step 003
 
+* Here I make some auxillary tests that further explore the syntax
+* Note: how the arounds perform, you get the top around, and sub arounds.
+
+Step 004
+
+* Note how a TODO is done
+* override the message
+* notice what happens when you put 2 assertions in each test
+
+Step 006
 
 
 
@@ -20,4 +31,6 @@ Step 002
 XXXXXX
 
 Want to show using before/after and before all/after all
+
+To difficult to test with Test::MockFile, as it does a "chdir";
 

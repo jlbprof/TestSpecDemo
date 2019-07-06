@@ -9,36 +9,49 @@ use File::Path;
 use File::Find;
 use Path::Tiny;
 
+sub _establish_file
+{
+    my ($fname, $contents, $mode) = @_;
+
+    if (!-e $fname)
+    {
+        if (open my $fh, '>', $fname)
+        {
+            print $fh $contents;
+            close $fh;
+        }
+        else
+        {
+            die "Cannot open $fname";
+        }
+
+        chmod $mode, $fname;
+    }
+
+    return;
+}
+
+# establishes or "reestablishes" a directory tree
+
 sub establish_tree {
     my ($dir) = @_;
 
     File::Path::make_path ($dir . "/subdir1/subdir2");
 
-    Path::Tiny::path ($dir . "/subdir1")->chmod (0777);
-    Path::Tiny::path ($dir . "/subdir1/subdir2")->chmod (0744);
+    chmod 0777, $dir . "/subdir1";
+    chmod 0744, $dir . "/subdir1/subdir2";
 
-    Path::Tiny::path ($dir . "/data.txt")->spew ("text1 text2 text3 text4");
-    Path::Tiny::path ($dir . "/data.txt")->chmod (0777);
+    _establish_file ($dir . "/data.txt", "text1 text2 text3 text4", 0777);
+    _establish_file ($dir . "/data1.txt", "text1 text2 text3 text4 text6", 0777);
+    _establish_file ($dir . "/data.lines", 'text1 text2', 0666);
 
-    Path::Tiny::path ($dir . "/data1.txt")->spew ("text1 text2 text3 text4 text6");
-    Path::Tiny::path ($dir . "/data1.txt")->chmod (0777);
+    _establish_file ($dir . "/subdir1/data.txt", 'text1 text2 text3 text4 text5', 0644);
+    _establish_file ($dir . "/subdir1/data.lines", 'text1 text2 text3 text4 text5 text6', 0600);
+    _establish_file ($dir . "/subdir1/.hidden", 'text1 text2 text3', 0644);
 
-    Path::Tiny::path ($dir . "/data.lines")->spew ('text1 text2');
-    Path::Tiny::path ($dir . "/data.lines")->chmod (0666);
-
-    Path::Tiny::path ($dir . "/subdir1/data.txt")->spew ('text1 text2 text3 text4 text5');
-    Path::Tiny::path ($dir . "/subdir1/data.txt")->chmod(0644);
-    Path::Tiny::path ($dir . "/subdir1/data.lines")->spew ('text1 text2 text3 text4 text5 text6');
-    Path::Tiny::path ($dir . "/subdir1/data.lines")->chmod(0600);
-    Path::Tiny::path ($dir . "/subdir1/.hidden")->spew ('text1 text2 text3');
-    Path::Tiny::path ($dir . "/subdir1/.hidden")->chmod(0644);
-
-    Path::Tiny::path ($dir . "/subdir1/subdir2/data.txt")->spew ('text1 text2 text3 another line');
-    Path::Tiny::path ($dir . "/subdir1/subdir2/data.txt")->chmod(0644);
-    Path::Tiny::path ($dir . "/subdir1/subdir2/data.lines")->spew ('text1 text2 text3 more lines');
-    Path::Tiny::path ($dir . "/subdir1/subdir2/data.lines")->chmod(0644);
-    Path::Tiny::path ($dir . "/subdir1/subdir2/.hidden")->spew ('text1 text2 text3 more and more');
-    Path::Tiny::path ($dir . "/subdir1/subdir2/.hidden")->chmod(0644);
+    _establish_file ($dir . "/subdir1/subdir2/data.txt", 'text1 text2 text3 another line', 0644);
+    _establish_file ($dir . "/subdir1/subdir2/data.lines", 'text1 text2 text3 more lines', 0644);
+    _establish_file ($dir . "/subdir1/subdir2/.hidden", 'text1 text2 text3 more and more', 0644);
 
     return;
 }
